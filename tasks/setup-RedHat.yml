@@ -1,0 +1,13 @@
+---
+- name: Enable MongoDB Repository
+  yum_repository:
+    name: mongodb-{{mongodb_version}}
+    description: MongoDB-{{mongodb_version}}
+    baseurl: "{{ mongodb_repo_baseurl }}"
+    gpgcheck: "{{ mongodb_repo_gpgcheck }}"
+    enabled: 1
+
+- name: Install Mongo server
+  yum:
+    name: "mongodb-org-{{mongodb_version}}"
+    state: installed

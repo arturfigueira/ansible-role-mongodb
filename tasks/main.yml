@@ -1,0 +1,4 @@
+---
+- include: prepare.yml
+- include: setup-{{ ansible_os_family }}.yml
+- include: configure.yml

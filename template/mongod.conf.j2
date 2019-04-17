@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+# mongo.conf
+
+#where to log
+logpath={{mongodb_logpath}}/{{mongodb_daemon}}.log
+
+logappend= {{mongodb_loggappend|to_nice_json|bool|lower}}
+
+# fork and run in background
+fork = {{mongodb_fork|to_nice_json|bool|lower}}
+
+port = {{mongodb_port}}
+
+dbpath={{mongodb_dbpath}}
+
+{% if mongodb_conf_bind_ip %}
+# Listen to local, LAN and Public interfaces.
+bind_ip = {{mongodb_conf_bind_ip}}
+{% endif %}
+
+{% if mongodb_runpath %}
+# location of pidfile
+pidfilepath = {{mongodb_runpath}}/{{mongodb_daemon}}.pid
+{% endif %}
+
+# Turn on/off security.  Off is currently the default
+auth = {{mongodb_auth|to_nice_json|bool|lower}}

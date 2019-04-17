@@ -1,0 +1,16 @@
+---
+- name: Downalod PyMongo source
+  get_url:
+    validate_certs: no
+    url: "{{ pymongo_source_url }}"
+    dest: "{{ pymongo_tmppath }}"
+
+- name: Untar PyMongo source
+  unarchive:
+    src: '/tmp/{{ pymongo_tar_file }}'
+    dest: "{{ pymongo_tmppath }}"
+
+- name: Install pymongo via setup install
+  shell: python setup.py install
+  args:
+    chdir: "{{ pymongo_tmppath }}/{{ pymongo_tar_file | regex_replace('.tar.gz$', '') }}"

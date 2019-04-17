@@ -1,0 +1,36 @@
+#MongoDB Version
+mongodb_version: "3.4.1"
+mongodb_repo_baseurl: "http://repo.mongodb.org/yum/redhat/{{ ansible_distribution_major_version }}/mongodb-org/{{ mongodb_version | regex_replace('^([0-9])\\.([0-9]*).*', '\\1.\\2') }}/x86_64/"
+mongodb_repo_gpgcheck: 0
+
+#OS settings
+mongodb_os_user:
+  name: mongod
+  shell: /bin/false
+  uid: 497
+  home: /var/lib
+
+#Service
+mongodb_daemon: mongod
+mongodb_conf_file: "{{mongodb_daemon}}.conf"
+mongodb_auth: false
+mongodb_loggappend: true
+mongodb_fork: true
+mongodb_port: 27017
+mongodb_conf_bind_ip: 127.0.0.1
+
+
+#Default MongoDB Directories
+mongodb_dbpath: /var/lib/mongo
+mongodb_logpath: /var/log/mongodb
+mongodb_runpath: /var/run/mongodb
+
+#default users
+mongodb_root_admin:
+  name: root
+  password: root
+
+#pymongo
+pymongo_tar_file: pymongo-3.7.2.tar.gz
+pymongo_source_url: 'https://files.pythonhosted.org/packages/0f/3a/b90cfa7e27fa92244925826538fa2cf80fed3cbd20a413fd0c1b9705d820/{{ pymongo_tar_file }}'
+pymongo_tmppath: /tmp

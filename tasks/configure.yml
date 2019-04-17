@@ -1,0 +1,47 @@
+---
+- name: Setup mongod.conf file
+  template:
+    src: template/mongod.conf.j2
+    dest: "/etc/{{mongodb_conf_file}}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure Mongo DB Directory
+  file:
+    state: directory
+    path: "{{mongodb_dbpath}}"
+    owner: "{{mongodb_os_user['name']}}"
+    group: "{{mongodb_os_user['name']}}"
+    mode: 0755
+
+- name: Configure Mongo Log Directory
+  file:
+    state: directory
+    path: "{{mongodb_logpath}}"
+    owner: "{{mongodb_os_user['name']}}"
+    group: "{{mongodb_os_user['name']}}"
+    mode: 0755
+
+- name: Restart MongoDB
+  service:
+    name: "{{mongodb_daemon}}"
+    enabled: yes
+    use: service
+    state: restarted
+
+- name: Ensure MongoDB is started
+  service: name="{{mongodb_daemon}}" use=service state=started
+
+- name: wait until MongoDB port is listening
+  wait_for: host=127.0.0.1 port="{{ mongodb_port }}" delay=5 state=started
+
+- name: Create MongoDb 'root' user
+  mongodb_user:
+    database: admin
+    name: "{{ mongodb_root_admin['name'] }}"
+    password: "{{ mongodb_root_admin['password'] }}"
+    update_password: always
+    roles: root
+    login_port: "{{ mongodb_port }}"
+  no_log: false #true
